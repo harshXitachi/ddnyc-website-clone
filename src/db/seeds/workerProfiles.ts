@@ -1,0 +1,135 @@
+import { db } from '@/db';
+import { workerProfiles } from '@/db/schema';
+
+async function main() {
+    const sampleWorkerProfiles = [
+        {
+            userId: 1,
+            skills: JSON.stringify(["JavaScript", "React", "TypeScript", "CSS", "HTML", "Redux"]),
+            hourlyRate: 75.00,
+            availability: 'full-time',
+            bio: 'Passionate frontend developer with 5 years of experience building responsive and user-friendly web applications. Specialized in React ecosystem and modern JavaScript frameworks. Love creating intuitive user interfaces that delight users.',
+            location: 'San Francisco, CA',
+            yearsExperience: 5,
+            resumeUrl: 'https://example.com/resumes/john-doe-resume.pdf',
+            createdAt: Math.floor(new Date('2024-11-15').getTime() / 1000),
+            updatedAt: Math.floor(new Date('2024-11-15').getTime() / 1000),
+        },
+        {
+            userId: 2,
+            skills: JSON.stringify(["Python", "Node.js", "PostgreSQL", "AWS", "Docker", "REST APIs"]),
+            hourlyRate: 85.00,
+            availability: 'full-time',
+            bio: 'Senior backend engineer with extensive experience in building scalable microservices and cloud infrastructure. Proficient in both Python and Node.js ecosystems. Strong focus on clean code and system architecture.',
+            location: 'New York, NY',
+            yearsExperience: 8,
+            resumeUrl: 'https://example.com/resumes/jane-smith-resume.pdf',
+            createdAt: Math.floor(new Date('2024-11-20').getTime() / 1000),
+            updatedAt: Math.floor(new Date('2024-11-20').getTime() / 1000),
+        },
+        {
+            userId: 3,
+            skills: JSON.stringify(["Figma", "Adobe XD", "UI/UX Design", "Prototyping", "Wireframing", "Design Systems"]),
+            hourlyRate: 60.00,
+            availability: 'contract',
+            bio: 'Creative UI/UX designer with a keen eye for detail and user-centered design principles. Experienced in creating beautiful and functional interfaces for web and mobile applications. Portfolio includes work for startups and Fortune 500 companies.',
+            location: 'Remote',
+            yearsExperience: 4,
+            resumeUrl: null,
+            createdAt: Math.floor(new Date('2024-12-01').getTime() / 1000),
+            updatedAt: Math.floor(new Date('2024-12-01').getTime() / 1000),
+        },
+        {
+            userId: 4,
+            skills: JSON.stringify(["Content Writing", "SEO", "Copywriting", "Blogging", "Technical Writing"]),
+            hourlyRate: 40.00,
+            availability: 'part-time',
+            bio: 'Versatile content writer specializing in SEO-optimized articles and engaging copy. Experience across various industries including tech, finance, and lifestyle. Committed to delivering high-quality content that drives traffic and conversions.',
+            location: 'Austin, TX',
+            yearsExperience: 3,
+            resumeUrl: 'https://example.com/resumes/writer-portfolio.pdf',
+            createdAt: Math.floor(new Date('2024-12-05').getTime() / 1000),
+            updatedAt: Math.floor(new Date('2024-12-05').getTime() / 1000),
+        },
+        {
+            userId: 5,
+            skills: JSON.stringify(["Python", "SQL", "Tableau", "Data Visualization", "Excel", "Power BI"]),
+            hourlyRate: 70.00,
+            availability: 'full-time',
+            bio: 'Detail-oriented data analyst with strong analytical skills and experience turning complex data into actionable insights. Proficient in statistical analysis and creating compelling visualizations that tell a story.',
+            location: 'Seattle, WA',
+            yearsExperience: 6,
+            resumeUrl: 'https://example.com/resumes/data-analyst-resume.pdf',
+            createdAt: Math.floor(new Date('2024-11-25').getTime() / 1000),
+            updatedAt: Math.floor(new Date('2024-11-25').getTime() / 1000),
+        },
+        {
+            userId: 6,
+            skills: JSON.stringify(["Digital Marketing", "Social Media", "SEO", "Google Analytics", "Email Marketing"]),
+            hourlyRate: 55.00,
+            availability: 'contract',
+            bio: 'Results-driven marketing specialist with proven track record of increasing brand visibility and engagement. Skilled in developing and executing comprehensive digital marketing strategies across multiple channels.',
+            location: 'Toronto, ON',
+            yearsExperience: 4,
+            resumeUrl: null,
+            createdAt: Math.floor(new Date('2024-12-08').getTime() / 1000),
+            updatedAt: Math.floor(new Date('2024-12-08').getTime() / 1000),
+        },
+        {
+            userId: 7,
+            skills: JSON.stringify(["JavaScript", "React", "Node.js", "MongoDB", "Express", "GraphQL"]),
+            hourlyRate: 95.00,
+            availability: 'full-time',
+            bio: 'Full stack developer with 10 years of experience building end-to-end web applications. Expert in MERN stack and modern development practices. Passionate about writing clean, maintainable code and mentoring junior developers.',
+            location: 'London, UK',
+            yearsExperience: 10,
+            resumeUrl: 'https://example.com/resumes/fullstack-dev-resume.pdf',
+            createdAt: Math.floor(new Date('2024-11-18').getTime() / 1000),
+            updatedAt: Math.floor(new Date('2024-11-18').getTime() / 1000),
+        },
+        {
+            userId: 8,
+            skills: JSON.stringify(["React Native", "iOS", "Android", "Flutter", "Swift", "Kotlin"]),
+            hourlyRate: 90.00,
+            availability: 'full-time',
+            bio: 'Mobile app developer specializing in cross-platform development with React Native and native iOS/Android apps. Published multiple apps on both App Store and Google Play with excellent user ratings and millions of downloads.',
+            location: 'San Diego, CA',
+            yearsExperience: 7,
+            resumeUrl: 'https://example.com/resumes/mobile-dev-resume.pdf',
+            createdAt: Math.floor(new Date('2024-12-03').getTime() / 1000),
+            updatedAt: Math.floor(new Date('2024-12-03').getTime() / 1000),
+        },
+        {
+            userId: 9,
+            skills: JSON.stringify(["Docker", "Kubernetes", "AWS", "CI/CD", "Terraform", "Jenkins"]),
+            hourlyRate: 100.00,
+            availability: 'contract',
+            bio: 'DevOps engineer with expertise in cloud infrastructure and automation. Specialized in containerization, orchestration, and building robust CI/CD pipelines. Reduced deployment times by 70% and improved system reliability for multiple clients.',
+            location: 'Remote',
+            yearsExperience: 9,
+            resumeUrl: 'https://example.com/resumes/devops-resume.pdf',
+            createdAt: Math.floor(new Date('2024-11-22').getTime() / 1000),
+            updatedAt: Math.floor(new Date('2024-11-22').getTime() / 1000),
+        },
+        {
+            userId: 10,
+            skills: JSON.stringify(["Adobe Premiere", "After Effects", "Video Editing", "Motion Graphics", "Color Grading"]),
+            hourlyRate: 50.00,
+            availability: 'part-time',
+            bio: 'Creative video editor with a passion for storytelling through visual media. Experienced in editing promotional videos, social media content, and corporate presentations. Strong attention to detail and ability to meet tight deadlines.',
+            location: 'Los Angeles, CA',
+            yearsExperience: 2,
+            resumeUrl: null,
+            createdAt: Math.floor(new Date('2024-12-10').getTime() / 1000),
+            updatedAt: Math.floor(new Date('2024-12-10').getTime() / 1000),
+        }
+    ];
+
+    await db.insert(workerProfiles).values(sampleWorkerProfiles);
+    
+    console.log('✅ Worker profiles seeder completed successfully');
+}
+
+main().catch((error) => {
+    console.error('❌ Seeder failed:', error);
+});
